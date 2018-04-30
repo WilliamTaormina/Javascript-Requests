@@ -42,7 +42,44 @@ _Post_ requests on the other hand, introduce new information to another website.
 
 When AJAX was first formalized by the World Wid Web Consortium in 2006, it required the use of an _*XMLHttpRequest*_ object, a JavaScript object that is used to retrieve data. There are several steps to creating an AJAX request or XHR, object.
 
-<div style={background-color:red}>![image](https://s3.amazonaws.com/codecademy-content/courses/intermediate-javascript-requests/diagrams/Asset+1.svg)</div>
+![image](https://s3.amazonaws.com/codecademy-content/courses/intermediate-javascript-requests/diagrams/Asset+1.svg)
+
+On the first line, we create an XMLHttpRequest object, by typing '_new_', then the type of the object, which is _XMLHttpRequest()_. This is called the '_new operator_'.
+
+The object is saved in a const called _xhr_. Throughout this request, we'll be accessing properties of this object.
+
+On the next line, we save the URL to which we're going to make our request in a const called _url_.
+
+Next, we set the _responseType_ of the xhr object to '_json_'.
+
+_onreadystatechange_ is an event handler that is called whenever the value of the _readyState_ property changes. We set it equal to an anonymous function. This function will handle the response to the request.
+
+```JavaScript
+// XMLHttpRequest GET
+
+const xhr = new XMLHttpRequest();
+const url = 'http://api-to-call.com/endpoint';
+
+xhr.responseType = 'json';
+xhr.onreadystatechange = function(){
+ if (xhr.readyState === XMLHttpRequest.DONE){
+  // execute the code here with the response...
+ }
+};
+
+xhr.open('GET',url);
+xhr.send();
+```
+
+First, we check if the _readyState_ of our xhr object is equal to 'XMLHttpRequest.DONE'. If that evaluates to _true_, the code block executes. It is useful while writing a new program to log the response to the console so that you can see its structure. Later, you might change this function to add parts of the response to your webpage or do something else with it entirely.
+
+Then, the _.open()_ method is called on the _xhr_ object, and it is passed two arguments.
+Argument # 1: "GET" - the type of request
+Argument # 2: url - the URL we are querying.
+
+._open()_ creates and structures the request. It tells the request what method to use, and what URL to query.
+
+Finally, we call the ._send()_ method on our xhr object and pass it no arguments. This is because data sent in _GET_ requests is sent as part of the URL. Calling the ._send()_ method sends the xhr object with its relevant information to the API URL.
 
 ### XHR GET Requests II
 
