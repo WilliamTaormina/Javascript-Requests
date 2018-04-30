@@ -42,7 +42,7 @@ _Post_ requests on the other hand, introduce new information to another website.
 
 When AJAX was first formalized by the World Wid Web Consortium in 2006, it required the use of an _*XMLHttpRequest*_ object, a JavaScript object that is used to retrieve data. There are several steps to creating an AJAX request or XHR, object.
 
-![image](https://s3.amazonaws.com/codecademy-content/courses/intermediate-javascript-requests/diagrams/Asset+1.svg)
+<div style={background-color:red}>![image](https://s3.amazonaws.com/codecademy-content/courses/intermediate-javascript-requests/diagrams/Asset+1.svg)</div>
 
 ### XHR GET Requests II
 
