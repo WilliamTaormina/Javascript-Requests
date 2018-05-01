@@ -1,4 +1,4 @@
-# Javascript-Requests
+# Old Javascript-Requests, and new Javascript Requests (ES6)
 
 Javascript Requests - What are they, and how do they work?
 
@@ -38,11 +38,9 @@ the url is saying "Google, please retrieve a list of pizza places near Union Squ
 
 _Post_ requests on the other hand, introduce new information to another website. Instead of sending this information in the URL of the Request, it is sent as a part of the body of the request.
 
-### XHR GET Requests I
+### XHR GET Requests
 
 When AJAX was first formalized by the World Wid Web Consortium in 2006, it required the use of an _*XMLHttpRequest*_ object, a JavaScript object that is used to retrieve data. There are several steps to creating an AJAX request or XHR, object.
-
-![image](https://s3.amazonaws.com/codecademy-content/courses/intermediate-javascript-requests/diagrams/Asset+1.svg)
 
 On the first line, we create an XMLHttpRequest object, by typing '_new_', then the type of the object, which is _XMLHttpRequest()_. This is called the '_new operator_'.
 
@@ -81,32 +79,103 @@ Argument # 2: url - the URL we are querying.
 
 Finally, we call the ._send()_ method on our xhr object and pass it no arguments. This is because data sent in _GET_ requests is sent as part of the URL. Calling the ._send()_ method sends the xhr object with its relevant information to the API URL.
 
-### XHR GET Requests II
+### XHR POST Requests
 
-### XHR GET Requests III
+Recall that in a _GET_ request, the query information is sent as part of the _URL_. However, in a _POST_ request, the information is sent to the server as part of the _body_ of the request.
 
-### XHR POST Requests I
+This information is created and saved in the _data_ constant and sent to the API as an argument passed to the ._send()_ method.;
 
-### XHR POST Requests II
+```javascript
+// XMLHttpRequest POST
+const xhr = new XMLHttpRequest();
+const url = "http://api-to-call.com/endpoint";
 
-### XHR Post Requests III
+const data = JSON.stringify({ id: "200" });
 
-### $.ajax() GET Requests I
+xhr.responseType = "json";
+xhr.onreadystatechange = function() {
+  if (xhr.readyState === XMLHttpRequest.DONE) {
+    // execute the code here with the response...
+  }
+};
 
-### $.ajax() GET Requests II
+xhr.open("POST", url);
+xhr.send(data);
+```
 
-### $.ajax() GET Requests III
+Compare the code callouts above for a _GET_ request and a _POST_ request. Notice the POST request has added an additional variable called "data". Obviously, the data that we want to send to our API must be formatted properly. The particular properties and values sent will depend on the API you're using and the information you wish to send and retrieve.
 
-### $.ajax() POST Requests I
+The object containing this data is passed to the _JSON.stringify()_ method, which will format the object as a string. This is saved to a const called 'data'.
 
-### $.ajax() POST Requests II
+Everything else remains the same until the final two lines. When we call the ._open()_ method on the xhr object, we pass the argument _POST_, instead of _GET_. Finally, we pass the _data_ string to the ._send()_ method.
 
-### $.ajax() POST Requests III
+### $.ajax() GET Requests
 
-### AJAX requests with $.get()
+In the example above, we constructed MXLHttpRequests from scratch, using vanilla Javascript to send the request and handle the response. But, repeating boilerplate GET and POST requests in this way can be tiresome.
 
-### AJAX requests with $.post()
+To make this process easier, we can construct requests using some methods from the jQuery library.
 
-### AJAX Requests with $.getJSON()
+Often times a project will already incude jQuery in the HTML, like so:
 
-### Review Requests I
+```html
+<script src='https://code.jquery.com/jquery-3.2.1.min.js'></script>
+```
+
+The _script_ points to the jQuery CDN which allows us to use jQuery in our project.
+
+$._ajax()_ is a method provided by the jQuery library specifically to handle AJAX requests. All parts f the request are included in a single object that is passed to the method as an argument. A full jQuery GET request is below:
+
+```jQuery
+$.ajax({
+ url: 'http://api-to-call.com/endpoint',
+ type: 'GET',
+ dataType: 'JSON',
+ success(response){
+  code to execute when the request is successful...
+ },
+error(jqXHR, status, errorThrown){
+ code to execute when response fails...
+},
+})
+```
+
+# New Javascript Requests (ES6)
+
+Asynchronously requesting and responding to data is such an integral part of what developers do with Javascript that a new type of object, called a _Promise_, was added to Javascript in ES6.
+
+A _PROMISE_ is an object that acts as a placeholder for data tht has been requested, but not yet received. Eventually, a promise will resolve to the value requested or to a reason why the request failed.
+
+If the requested information or any error except a network error is received, the Promise is fulfilled and calls a function handle the response. If there is a network error, the promise is rejected, and will call a function to handle the error.
+
+Consider the _fetch()_ function, which uses Promises to handle requests. Or, the ._then()_ method, to handle fulfilled and rejected Promises. And what's that I heard about async and await?
+
+### fetch() GET Requests
+
+```javascript
+fetch('http://api-to-call.com/endpoint').then(response => {
+ if (response.ok){
+  return response.json();
+ }
+ throw new Error('Request failed!');
+}, networkError => console.log(networkError.message)
+).then(jsonResponse => {
+ // code to execute with jsonResponse
+})
+});
+```
+
+On the first line, we call _fetch()_ function and pass it a single argument - the url of the API endpoint. Because this is a _GET_ request, this url will contain the url to the API and may also contain query parameters, an API key, a client ID, or information necessary to make the request.
+
+The _fetch()_ function:
+
+1.  creates a _request object_ using the information provided to it
+2.  send that request object to the url provided
+3.  returns a Promise that ultimately resolves to a response object.
+
+_Note: because *fetch()* is a web API, not all browsers support it. To ensure that all users can run code that uses fetch, we can add a polyfill that will be used if a user doesn't have *fetch()* support in thier browser._
+
+As you can also see in the example above, we chain a ._then()_ method to the closing parameters of the fetch function. This is where the asynchronicity of Javascript comes in - the fetch function makes the request and returns the response, and we don't call the function that will handle the response until it has been received.
+
+The ._then()_ method takes two callback functions as parameters, the first of which handles success, and the second of which handles failure.
+
+The first callback function takes _response_ as a parameter. _response_ is the resolution of the Promise returned by the fetch function.
