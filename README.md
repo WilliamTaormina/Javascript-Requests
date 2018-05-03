@@ -179,3 +179,22 @@ As you can also see in the example above, we chain a ._then()_ method to the clo
 The ._then()_ method takes two callback functions as parameters, the first of which handles success, and the second of which handles failure.
 
 The first callback function takes _response_ as a parameter. _response_ is the resolution of the Promise returned by the fetch function.
+
+## New New Javascript Requests (ES6 -> ES7)
+
+```javascript
+// async await GET
+
+async function getData() {
+  try {
+    let response = await fetch("URL");
+    if (response.ok) {
+      let jsonResponse = await response.json();
+      // code to execute with jsonResponse
+    }
+    throw new Error("Request Failed");
+  } catch (error) {
+    console.log(error);
+  }
+}
+```
